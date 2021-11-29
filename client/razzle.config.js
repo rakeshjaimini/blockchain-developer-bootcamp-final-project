@@ -2,6 +2,7 @@ module.exports = {
   options: {
     buildType: 'spa',
     enableBabelCache: false,
+    enableSourceMaps: false,
   },
   modifyWebpackConfig(opts) {
     const config = opts.webpackConfig;
@@ -9,7 +10,10 @@ module.exports = {
     // Ignore fs dependencies so we can use winston
     // if (opts.env.target === 'node' && !opts.env.dev) {
     config.node = { fs: 'empty' };
+    config.performance ={hints : false};        
+    
     // }
+
 
     return config;
   },
