@@ -106,6 +106,8 @@ contract NFTTrade is Ownable, Pausable  {
         imgUrl:_imgUrl,
         description: _description
     });
+    hashList.push(nftHash);
+    hashListLength = hashList.length;
     if (!_buyNow) {
       listedNFTs[nftHash].status = Status.Auction;
       emit LogAuction(_contractAddr, _tokenId);
@@ -113,8 +115,6 @@ contract NFTTrade is Ownable, Pausable  {
     else {
       emit LogBuyNow(_contractAddr, _tokenId);
     }
-    hashList.push(nftHash);
-    hashListLength = hashList.length;
   }
 
   /// @notice Buy NFT listed for sale
@@ -131,10 +131,6 @@ contract NFTTrade is Ownable, Pausable  {
       listedNFTs[nftHash].buyer = payable(msg.sender);
       listedNFTs[nftHash].status = Status.Sold;
       listedNFTs[nftHash].seller.transfer(listedNFTs[nftHash].price);
-      uint amountToRefund = msg.value - listedNFTs[nftHash].price;
-      if (amountToRefund > 0) {
-        listedNFTs[nftHash].buyer.transfer(amountToRefund);
-      }
       emit LogSold(_contractAddr, _tokenId);
     }
   
